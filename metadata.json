@@ -1,0 +1,6 @@
+{
+  "name": "DataMaster Pro",
+  "description": "Comprehensive full-stack data analytics platform for ingestion, cleaning, transformation, and advanced visualization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
