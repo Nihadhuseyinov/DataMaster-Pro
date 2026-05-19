@@ -26,6 +26,23 @@ export default function IngestionView({ activeDataset, onDatasetChange }: { acti
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  const cleanData = (data: any[]) => {
+    return data.map(row => {
+      const newRow = { ...row };
+      Object.keys(newRow).forEach(key => {
+        let val = newRow[key];
+        if (typeof val === 'string') {
+          // Trim whitespace
+          val = val.trim();
+          // Remove leading/trailing quotes if any
+          val = val.replace(/^["']|["']$/g, '');
+          newRow[key] = val;
+        }
+      });
+      return newRow;
+    });
+  };
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
@@ -48,21 +65,23 @@ export default function IngestionView({ activeDataset, onDatasetChange }: { acti
     if (file.name.endsWith('.csv')) {
       Papa.parse(file, {
         header: true,
+        skipEmptyLines: true,
         complete: (results) => {
           setTimeout(() => {
             setIsUploading(false);
+            const cleaned = cleanData(results.data);
             onDatasetChange({
               name: file.name,
-              rows: results.data.length,
+              rows: cleaned.length,
               cols: results.meta.fields?.length || 0,
               type: 'Structured CSV',
               timestamp: new Date().toLocaleTimeString(),
-              data: results.data,
+              data: cleaned,
               headers: results.meta.fields
             });
             toast.success(`${file.name} successfully ingested!`, { 
               id: 'upload',
-              description: `${results.data.length} rows processed and indexed.`
+              description: `${cleaned.length} rows processed, cleaned and indexed.`
             });
           }, 1500);
         },

@@ -119,10 +119,14 @@ export async function pythonAnalysis(question: string, schema: string, sampleDat
           
           USER QUESTION: ${question}
           
-          Return your response as a JSON object with:
+          INSTRUCTIONS:
+          1. DATA CLEANING: The data might have formatting errors (e.g., strings in numeric columns, leading/trailing spaces, inconsistent case). Include code to clean numeric columns (e.g., removing '$' or ',' and converting to float) before analysis.
+          2. ROBUSTNESS: Use try-except blocks where appropriate to handle potential data types issues.
+          3. ANALYSIS: Perform the specific analysis requested by the user.
+          4. RETURN: Return your response as a JSON object with:
           {
             "code": "The python code as a string",
-            "explanation": "A concise explanation of the analysis and expected findings"
+            "explanation": "A concise explanation of the analysis, the cleaning steps taken, and expected findings"
           }
           
           IMPORTANT: Return ONLY the JSON object. Do not include markdown blocks.

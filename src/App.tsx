@@ -31,7 +31,7 @@ import HomePanel from "./components/HomePanel";
 import IngestionView from "./components/IngestionView";
 import SqlLabView from "./components/SqlLabView";
 import PythonExpertView from "./components/PythonExpertView";
-import GmailAutomationView from "./components/GmailAutomationView";
+import GmailView from "./components/GmailView";
 import WorkspaceView from "./components/WorkspaceView";
 import SalaryAnalyticsView from "./components/SalaryAnalyticsView";
 import AutoMLView from "./components/AutoMLView";
@@ -47,6 +47,7 @@ interface AppContextType {
   currentView: View;
   setCurrentView: (v: View) => void;
   notifications: Notification[];
+  isAiReady: boolean | null;
 }
 
 interface Notification {
@@ -104,7 +105,7 @@ export default function App() {
       case "upload": return <IngestionView activeDataset={activeDataset} onDatasetChange={setActiveDataset} />;
       case "sql": return <SqlLabView activeDataset={activeDataset} />;
       case "python": return <PythonExpertView activeDataset={activeDataset} isAiReady={isAiReady} />;
-      case "gmail": return <GmailAutomationView activeDataset={activeDataset} />;
+      case "gmail": return <GmailView />;
       case "settings": return <SettingsView />;
       default: return <IngestionView activeDataset={activeDataset} onDatasetChange={setActiveDataset} />;
     }
@@ -120,6 +121,7 @@ export default function App() {
         currentView,
         setCurrentView,
         notifications,
+        isAiReady,
       }}
     >
       <div className={`min-h-screen ${darkMode ? "bg-slate-950" : "bg-slate-50"} transition-colors text-slate-100`}>
@@ -155,8 +157,8 @@ function Sidebar() {
 
   const menuItems = [
     { icon: <FileUp size={20} />, label: "Məlumat Yükləmə", id: "upload" as View },
-    { icon: <Terminal size={20} />, label: "Python Expert", id: "python" as View },
-    { icon: <Mail size={20} />, label: "Gmail Automation", id: "gmail" as View },
+    { icon: <Terminal size={20} />, label: "Python Laboratoriya", id: "python" as View },
+    { icon: <Mail size={20} />, label: "Gmail", id: "gmail" as View },
     { icon: <Code2 size={20} />, label: "SQL Laboratoriya", id: "sql" as View },
   ];
 

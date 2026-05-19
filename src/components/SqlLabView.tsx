@@ -16,7 +16,10 @@ import alasql from "alasql";
 import { toast } from "sonner";
 import { cn } from "../lib/utils";
 
+import { useApp } from "../App";
+
 export default function SqlLabView({ activeDataset }: { activeDataset?: any }) {
+  const { isAiReady } = useApp();
   const [prompt, setPrompt] = useState("");
   const [sqlCode, setSqlCode] = useState(`-- Məlumatları görmək üçün SQL sorğusu\nSELECT * FROM data;`);
   const [results, setResults] = useState<any[] | null>(null);
@@ -34,6 +37,10 @@ export default function SqlLabView({ activeDataset }: { activeDataset?: any }) {
     }
     if (!activeDataset) {
       toast.error("Zəhmət olmasa əvvəlcə məlumatı yükləyin.");
+      return;
+    }
+    if (isAiReady === false) {
+      toast.error("GEMINI_API_KEY tapılmadı. Zəhmət olmasa Ayarlar bölməsindən AI qoşulmasını yoxlayın.");
       return;
     }
 
